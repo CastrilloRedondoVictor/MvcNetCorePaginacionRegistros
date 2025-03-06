@@ -1,0 +1,93 @@
+﻿@model IEnumerable<MvcNetCorePaginacionRegistros.Models.Empleado>
+
+@{
+    ViewData["Title"] = "PaginarGrupoEmpleadosOficio";
+    int numRegistros = 0;
+    if (ViewData["Registros"] != null)
+    {
+        numRegistros = (int)ViewData["Registros"];
+    }
+    int numPagina = 1;
+    var oficios = ViewData["OFICIOS"] as List<string>;
+}
+
+<h1>PaginarGrupoEmpleadosOficio</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="oficio">Oficio</label>
+        <select class="form-control" id="oficio" name="oficio">
+            @foreach (string oficio in oficios)
+            {
+                <option value="@oficio">@oficio</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+@if(@Model != null)
+{
+<ul class="list-group list-group-horizontal">
+    @for (int i = 1; i <= numRegistros; i += 2)
+    {
+        <li class="list-group-item">
+                <a asp-action="PaginarEmpleadosOficio" asp-route-oficio="@ViewData["OFICIO"]" asp-route-posicion="@i">Página @numPagina</a>
+        </li>
+        numPagina += 1;
+    }
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdEmpleado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Oficio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdDepartamento)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdEmpleado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Oficio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Salario)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdDepartamento)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+else
+{
+    <h2>No hay registros</h2>
+}
